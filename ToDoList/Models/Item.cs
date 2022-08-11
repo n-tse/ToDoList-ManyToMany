@@ -1,17 +1,18 @@
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace ToDoList.Models
 {
-    public class Item
+  public class ToDoListContext : DbContext
+  {
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Item> Items { get; set; }
+    public DbSet<CategoryItem> CategoryItem { get; set; }
+
+    public ToDoListContext(DbContextOptions options) : base(options) { }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        public Item()
-        {
-            this.JoinEntities = new HashSet<CategoryItem>();
-        }
-
-        public int ItemId { get; set; }
-        public string Description { get; set; }
-
-        public virtual ICollection<CategoryItem> JoinEntities { get;}
+      optionsBuilder.UseLazyLoadingProxies();
     }
+  }
 }
